@@ -1,1 +1,26 @@
 @import "tailwindcss";
+
+#loadingAnimation{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+}
+#loadingAnimation hr{
+    height: 20px;
+    border-radius: 4px;
+    background-color: white;
+    background: linear-gradient(to right,#9ed7ff,#ffffff,#9ed7ff);
+    background-size: 800px 50px;
+    animation: loading 3s infinite linear;
+}
+@keyframes loading {
+    0%{
+        background-position: -800px 0;
+
+    }
+    100%{
+        background-position: 800px 0;
+    }
+}

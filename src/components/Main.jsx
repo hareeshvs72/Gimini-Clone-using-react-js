@@ -11,6 +11,7 @@ import { GEMINI_API_KEY } from './ApiKey';
 function Main() {
     const [input, setInput] = useState('')
     const [content, setContent] = useState('')
+    const [loading ,setLoading] = useState(false)
     const [prevPrompt ,setPrevprompt] = useState([])
     // console.log(input);
     console.log(content);
@@ -19,19 +20,23 @@ function Main() {
     const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY  });
 
     async function mainApi(textValue) {
+         setLoading(true)
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: textValue,
         });
         console.log(response.text);
         setContent(response.text)
+       setLoading(false)
     }
 
     const handileSend = () => {
+          setLoading(true)
         mainApi(input);
         setPrevprompt([...prevPrompt,input])
         sessionStorage.setItem("prompt",prevPrompt)
         setInput("")
+         
     }
     
 
@@ -81,9 +86,20 @@ function Main() {
                         </div>
                     </>
                     :   
-
+                         
                     <div className='text-justify min-h-[500px] max-h-[500px] my-3 overflow-x-hidden overflow-y-scroll w-ful h-full'>
-                        <p>{content}</p>
+                       { 
+                        loading? 
+                        <div id='loadingAnimation'>
+                          
+                             <hr />
+                              <hr />
+                               <hr />
+                        </div>
+                        :
+                        <div>
+                            <p>{content}</p>
+                         </div>}
                     </div>
 
                 }
