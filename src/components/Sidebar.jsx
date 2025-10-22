@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from '@fortawesome/free-solid-svg-icons/faPlus';
-import { faClockRotateLeft, faGear, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
-function Sidebar() {
+import { faClockRotateLeft, faGear, faMessage, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
+function Sidebar({setPrevprompt,prevPrompt}) {
     const [menuBar,setMenuBar] = useState(false)
+    console.log(prevPrompt);
+    
     return (
         <>
             <div >
@@ -25,6 +27,13 @@ function Sidebar() {
                                 </div>
                                 <p className={`mx-3 text-xl my-3 font-semibold  ${menuBar?"hidden" :"visible"}` }>Recent</p>
                          </div>
+                         { prevPrompt.map((items,index)=>(
+                             <div key={index} className='rounded-full p-3 mt-1 flex  hover:bg-gray-200  '>
+                               <FontAwesomeIcon icon={faMessage}   />
+                                <p className={`mx-3 font-semibold ${menuBar?"hidden" :"visible"}` }> {items} </p>
+                            </div>
+                         ))  
+                           }
                       </div>
                          <div className=''>
                        {/* help */}

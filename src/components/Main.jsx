@@ -8,37 +8,43 @@ import { GEMINI_API_KEY } from './ApiKey';
 
 
 
-function Main() {
+function Main({ setPrevprompt, prevPrompt }) {
     const [input, setInput] = useState('')
     const [content, setContent] = useState('')
-    const [loading ,setLoading] = useState(false)
-    const [prevPrompt ,setPrevprompt] = useState([])
+    const [loading, setLoading] = useState(false)
+    const [headInput ,setHeadInput] = useState()
+
     // console.log(input);
     console.log(content);
-    console.log(prevPrompt);
-    
-    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY  });
+
+
+    const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
     async function mainApi(textValue) {
-         setLoading(true)
+      
         const response = await ai.models.generateContent({
             model: "gemini-2.5-flash",
             contents: textValue,
         });
         console.log(response.text);
         setContent(response.text)
-       setLoading(false)
+        setLoading(false)
+        setInput("")
     }
 
-    const handileSend = () => {
-          setLoading(true)
-        mainApi(input);
-        setPrevprompt([...prevPrompt,input])
-        sessionStorage.setItem("prompt",prevPrompt)
+    const handileSend = async () => {
+        
+        setLoading(true)
+        setHeadInput(input)
+        setPrevprompt(prev => [...prev, input])
+             
+             await mainApi(input);
+        
         setInput("")
-         
+        console.log(prevPrompt);
+
     }
-    
+
 
     return (
         <div className=' flex-1 px-10 my-3'>
@@ -85,28 +91,35 @@ function Main() {
                             </div>
                         </div>
                     </>
-                    :   
-                         
+                    :
+
                     <div className='text-justify min-h-[500px] max-h-[500px] my-3 overflow-x-hidden overflow-y-scroll w-ful h-full'>
-                       { 
-                        loading? 
-                        <div id='loadingAnimation'>
-                          
-                             <hr />
-                              <hr />
-                               <hr />
-                        </div>
-                        :
-                        <div>
-                            <p>{content}</p>
-                         </div>}
+                        {
+                            loading ?
+                                <div id='loadingAnimation'>
+
+                                    <hr />
+                                    <hr />
+                                    <hr />
+                                </div>
+                                :
+                                <div className=''>
+                                    <div className='flex my-2'>
+                                        <img src="/user_icon.png" alt="user image " width={'40px'} height={'40px'} style={{ borderRadius: '50%' }} />
+                                        <h1 className='font-bold mx-3 '>{headInput}</h1>
+                                    </div>
+                                    <div className='flex items-start justify-between'>
+                                        <img src={'/gemini_icon.png'} alt="gemini icon" width={'50px'} height={'50px'} />
+                                        <p className='p-2'>{content}</p>
+                                    </div>
+                                </div>}
                     </div>
 
                 }
                 {/* serach prompt */}
 
                 <div className='w-full  relative ' >
-                    <input value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e)=>{if(e.key=='Enter'){handileSend()}}} type="text" placeholder='Enter A Prompt Here ' className=' relative bg-gray-300  py-3 px-5 w-full rounded-full ' />
+                    <input value={input} onChange={(e) => setInput(e.target.value)} onKeyDown={(e) => { if (e.key == 'Enter') { handileSend() } }} type="text" placeholder='Enter A Prompt Here ' className=' relative bg-gray-300  py-3 px-5 w-full rounded-full ' />
                     <div className='absolute right-0 top-3 mx-5 '>
                         <FontAwesomeIcon icon={faImages} className='text-xl' />
                         <FontAwesomeIcon icon={faMicrophone} className='ms-2 text-xl' />
