@@ -3,7 +3,6 @@ import Header from './Header'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCode, faCompass, faLightbulb, faMessage, faImages, faMicrophone, faPaperPlane } from '@fortawesome/free-solid-svg-icons'
 import { GoogleGenAI } from "@google/genai";
-import { GEMINI_API_KEY } from './ApiKey';
 
 
 
@@ -13,11 +12,11 @@ function Main({ setPrevprompt, prevPrompt }) {
     const [content, setContent] = useState('')
     const [loading, setLoading] = useState(false)
     const [headInput ,setHeadInput] = useState()
+    const  GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY
 
     // console.log(input);
     console.log(content);
-
-
+   
     const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
     async function mainApi(textValue) {
